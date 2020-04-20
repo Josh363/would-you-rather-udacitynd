@@ -7,6 +7,10 @@ import { Check } from 'react-bootstrap-icons'
 import NotFound from './NotFound'
 
 export const Question = ({ question, authedUser, dispatch }) => {
+  if (!question) {
+    return <NotFound />
+  }
+
   const { author, optionOne, optionTwo } = question
 
   const onSubmit = (answer) => {
@@ -20,12 +24,8 @@ export const Question = ({ question, authedUser, dispatch }) => {
     )
   }
 
-  if (!question) {
-    return <NotFound />
-  }
-
-  const stats = questionAnswered(authedUser, question)
-    ? computeStatistics(question)
+  const stats = isQuestionAnswered(authedUser, question)
+    ? computeStats(question)
     : null
 
   return (
@@ -35,20 +35,20 @@ export const Question = ({ question, authedUser, dispatch }) => {
       <Row>
         <Col>
           <h2> Option 1 </h2>
-          <p> {`${optionOne['text']}`} </p>
-          {question['optionOne']['votes'].includes(authedUser) && (
+          <p> {`${optionOne.text}`} </p>
+          {question.optionOne.votes.includes(authedUser) && (
             <Check color="green" />
           )}
         </Col>
         <Col>
           <h2> Option 2</h2>
-          <p> {`${optionTwo['text']}`} </p>
-          {question['optionTwo']['votes'].includes(authedUser) && (
+          <p> {`${optionTwo.text}`} </p>
+          {question.optionTwo.votes.includes(authedUser) && (
             <Check color="green" />
           )}
         </Col>
       </Row>
-      {!questionAnswered(authedUser, question) ? (
+      {!isQuestionAnswered(authedUser, question) ? (
         <Row>
           <Col>
             <Button
@@ -61,9 +61,9 @@ export const Question = ({ question, authedUser, dispatch }) => {
           <Col>
             <Button
               variant="outline-primary"
-              onClick={() => onSubmit('optionOne')}
+              onClick={() => onSubmit('optionTwo')}
             >
-              Choose Option 1
+              Choose Option 2
             </Button>
           </Col>
         </Row>
@@ -72,12 +72,12 @@ export const Question = ({ question, authedUser, dispatch }) => {
           <Col>
             <p>{`${
               stats.voterOne
-            } people voted option 1 (${stats.percentOne.toFixed(2)}%)`}</p>
+            } people voted option 1 (${stats.optionOneStats.toFixed(2)}%)`}</p>
           </Col>
           <Col>
             <p>{`${
               stats.voterTwo
-            } people voted option 2 (${stats.percentTwo.toFixed(2)}%)`}</p>
+            } people voted option 2 (${stats.optionTwoStats.toFixed(2)}%)`}</p>
           </Col>
         </Row>
       )}
@@ -85,22 +85,22 @@ export const Question = ({ question, authedUser, dispatch }) => {
   )
 }
 
-function computeStatistics(question) {
-  let voterOne = question['optionOne']['votes'].length
-  let voterTwo = question['optionTwo']['votes'].length
+function computeStats(question) {
+  let voterOne = question.optionOne.votes.length
+  let voterTwo = question.optionTwo.votes.length
 
   return {
     voterOne,
     voterTwo,
     voterAll: voterOne + voterTwo,
-    percentOne: (100 * voterOne) / (voterOne + voterTwo),
-    percentTwo: (100 * voterTwo) / (voterOne + voterTwo),
+    optionOneStats: (100 * voterOne) / (voterOne + voterTwo),
+    optionTwoStats: (100 * voterTwo) / (voterOne + voterTwo),
   }
 }
 
-function questionAnswered(uid, question) {
-  let votes1 = question['optionOne']['votes']
-  let votes2 = question['optionTwo']['votes']
+function isQuestionAnswered(uid, question) {
+  let votes1 = question.optionOne.votes
+  let votes2 = question.optionTwo.votes
   return votes1.includes(uid) || votes2.includes(uid)
 }
 

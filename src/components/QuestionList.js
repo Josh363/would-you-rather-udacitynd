@@ -1,34 +1,29 @@
 import React, { useState } from 'react'
-import { Tab, Tabs } from 'react-bootstrap'
+import { Tab, Tabs, ListGroup } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { ListGroup } from 'react-bootstrap'
 
 export const QuestionList = ({ user, qlist }) => {
   const [key, setKey] = useState('unanswered')
-
-  //create switch statement with answered/unanswered
-  //create qtype array
-  //map over qtype array and then questions to generate tabs and individual questions
 
   const { id } = user
   let answeredQuestions = []
   let unansweredQuestions = []
 
   unansweredQuestions = qlist.filter((q) => {
-    let votes1 = q['optionOne']['votes']
-    let votes2 = q['optionTwo']['votes']
+    let votes1 = q.optionOne.votes
+    let votes2 = q.optionTwo.votes
     return !votes1.includes(id) && !votes2.includes(id)
   })
 
   answeredQuestions = qlist.filter((q) => {
-    let votes1 = q['optionOne']['votes']
-    let votes2 = q['optionTwo']['votes']
+    let votes1 = q.optionOne.votes
+    let votes2 = q.optionTwo.votes
     return votes1.includes(id) || votes2.includes(id)
   })
 
-  unansweredQuestions.sort((x, y) => y['timestamp'] - x['timestamp'])
-  answeredQuestions.sort((x, y) => y['timestamp'] - x['timestamp'])
+  unansweredQuestions.sort((x, y) => y.timestamp - x.timestamp)
+  answeredQuestions.sort((x, y) => y.timestamp - x.timestamp)
 
   return (
     <Tabs
@@ -78,10 +73,9 @@ export const QuestionList = ({ user, qlist }) => {
   )
 }
 
-function mapStateToProps({ questions, users, authedUser }, { qtype }) {
-  const qlist = Object.keys(questions).map((qid) => questions[qid])
+function mapStateToProps({ questions, users, authedUser }) {
+  const qlist = Object.values(questions)
   return {
-    qtype,
     qlist,
     user: users[authedUser],
   }

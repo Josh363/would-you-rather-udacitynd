@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { logout } from '../actions/authedUser'
 import { handleReceiveUsers } from '../actions/users'
 import { handleReceiveQuestions } from '../actions/questions'
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { Container, Button } from 'react-bootstrap'
 
 import Login from './Login'
@@ -27,12 +27,11 @@ export const App = ({ authedUser, dispatch }) => {
         <NavBar />
         {authedUser === null ? (
           <>
-            <Redirect to="/" />
             <Login />
           </>
         ) : (
           <div>
-            <div style={{ fontSize: '1.5em' }}>
+            <div>
               {`Logged in as ${authedUser} `}
               <Button
                 variant="danger"
@@ -47,7 +46,7 @@ export const App = ({ authedUser, dispatch }) => {
               <Route path="/leaderboard" component={LeaderBoard} />
               <Route path="/add" component={NewQuestion} />
               <Route path="/questions/:qid" component={Question} />
-              <Route component={NotFound} />
+              <Route path="*" component={NotFound} />
             </Switch>
           </div>
         )}
