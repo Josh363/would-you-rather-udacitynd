@@ -7,6 +7,10 @@ import { ListGroup } from 'react-bootstrap'
 export const QuestionList = ({ user, qlist }) => {
   const [key, setKey] = useState('unanswered')
 
+  //create switch statement with answered/unanswered
+  //create qtype array
+  //map over qtype array and then questions to generate tabs and individual questions
+
   const { id } = user
   let answeredQuestions = []
   let unansweredQuestions = []
