@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
-import { handleAddQuestion } from '../actions/questions'
+import { handleAddQuestion } from '../actions/shared'
 
 export const NewQuestion = ({ authedUser, dispatch }) => {
   const [optionOne, setOptionOne] = useState('')

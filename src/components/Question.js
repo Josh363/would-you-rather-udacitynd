@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { handleAnswerQuestion } from '../actions/questions'
+import { handleQuestionAnswer } from '../actions/shared'
 import { Row, Col, Button } from 'react-bootstrap'
 import { Check } from 'react-bootstrap-icons'
 
@@ -15,13 +15,7 @@ export const Question = ({ question, authedUser, dispatch }) => {
 
   const onSubmit = (answer) => {
     const qid = question.id
-    dispatch(
-      handleAnswerQuestion({
-        authedUser,
-        qid,
-        answer,
-      })
-    )
+    dispatch(handleQuestionAnswer(authedUser, qid, answer))
   }
 
   const stats = isQuestionAnswered(authedUser, question)

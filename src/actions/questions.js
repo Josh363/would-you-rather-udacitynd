@@ -1,47 +1,38 @@
-import { handleReceiveUsers } from './users'
-import {
-  _getQuestions,
-  _saveQuestionAnswer,
-  _saveQuestion,
-} from '../utils/_DATA'
+import { _getQuestions } from '../utils/_DATA'
 
 export const RECEIVE_QUESTIONS = 'RECEIVE_QUESTIONS'
+export const ADD_QUESTION_TO_QUESTIONS = 'ADD_QUESTION_TO_QUESTION'
+export const ADD_ANSWER_TO_QUESTIONS = 'ADD_ANSWER_TO_QUESTION'
 
 // action creaters
-function receive_questions(questions) {
+function receiveQuestions(questions) {
   return {
     type: RECEIVE_QUESTIONS,
     questions,
   }
 }
 
-// async functions
+export function addQuestionToQuestions(question) {
+  return {
+    type: ADD_QUESTION_TO_QUESTIONS,
+    question,
+  }
+}
+
+export function addAnswerToQuestions(authedUser, qid, answer) {
+  return {
+    type: ADD_ANSWER_TO_QUESTIONS,
+    authedUser,
+    qid,
+    answer,
+  }
+}
+
+// async function
 export function handleReceiveQuestions() {
   return (dispatch) => {
     _getQuestions()
-      .then((res) => dispatch(receive_questions(res)))
-      .catch(() => console.assert('Error: failed to get questions'))
-  }
-}
-
-export function handleAnswerQuestion(answerObject) {
-  return (dispatch) => {
-    _saveQuestionAnswer(answerObject)
-      .then(() => {
-        dispatch(handleReceiveQuestions())
-        dispatch(handleReceiveUsers())
-      })
-      .catch((e) => console.assert('Error: failed to save poll'))
-  }
-}
-
-export function handleAddQuestion(question) {
-  return (dispatch) => {
-    _saveQuestion(question)
-      .then(() => {
-        dispatch(handleReceiveQuestions())
-        dispatch(handleReceiveUsers())
-      })
-      .catch((e) => console.assert('Error: failed to add question'))
+      .then((res) => dispatch(receiveQuestions(res)))
+      .catch(() => console.warn('Error: failed to get questions'))
   }
 }
