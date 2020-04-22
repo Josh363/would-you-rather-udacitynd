@@ -18,9 +18,17 @@ export const Question = ({ question, authedUser, dispatch }) => {
     dispatch(handleQuestionAnswer(authedUser, qid, answer))
   }
 
-  const stats = isQuestionAnswered(authedUser, question)
-    ? computeStats(question)
-    : null
+  const isQuestionAnswered = (uid, question) => {
+    let votes1 = question.optionOne.votes
+    let votes2 = question.optionTwo.votes
+    return votes1.includes(uid) || votes2.includes(uid)
+  }
+
+  //stats logic
+  const voterOne = question.optionOne.votes.length
+  const voterTwo = question.optionTwo.votes.length
+  const optionOneStats = (100 * voterOne) / (voterOne + voterTwo)
+  const optionTwoStats = (100 * voterTwo) / (voterOne + voterTwo)
 
   return (
     <div>
@@ -64,38 +72,19 @@ export const Question = ({ question, authedUser, dispatch }) => {
       ) : (
         <Row>
           <Col>
-            <p>{`${
-              stats.voterOne
-            } people voted option 1 (${stats.optionOneStats.toFixed(2)}%)`}</p>
+            <p>{`${voterOne} people voted option 1 (${optionOneStats.toFixed(
+              2
+            )}%)`}</p>
           </Col>
           <Col>
-            <p>{`${
-              stats.voterTwo
-            } people voted option 2 (${stats.optionTwoStats.toFixed(2)}%)`}</p>
+            <p>{`${voterTwo} people voted option 2 (${optionTwoStats.toFixed(
+              2
+            )}%)`}</p>
           </Col>
         </Row>
       )}
     </div>
   )
-}
-
-function computeStats(question) {
-  let voterOne = question.optionOne.votes.length
-  let voterTwo = question.optionTwo.votes.length
-
-  return {
-    voterOne,
-    voterTwo,
-    voterAll: voterOne + voterTwo,
-    optionOneStats: (100 * voterOne) / (voterOne + voterTwo),
-    optionTwoStats: (100 * voterTwo) / (voterOne + voterTwo),
-  }
-}
-
-function isQuestionAnswered(uid, question) {
-  let votes1 = question.optionOne.votes
-  let votes2 = question.optionTwo.votes
-  return votes1.includes(uid) || votes2.includes(uid)
 }
 
 function mapStateToProps({ authedUser, questions }, props) {

@@ -1,7 +1,7 @@
 import { _getQuestions } from '../utils/_DATA'
 
 export const RECEIVE_QUESTIONS = 'RECEIVE_QUESTIONS'
-export const ADD_QUESTION_TO_QUESTIONS = 'ADD_QUESTION_TO_QUESTION'
+export const ADD_QUESTION_TO_QUESTIONS = 'ADD_QUESTION_TO_QUESTIONS'
 export const ADD_ANSWER_TO_QUESTIONS = 'ADD_ANSWER_TO_QUESTION'
 
 // action creaters

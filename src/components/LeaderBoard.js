@@ -18,7 +18,7 @@ const LeaderBoard = ({ users }) => {
               <img src={avatarURL} alt="user avatar"></img>
               <p>{name}</p>
               <p>
-                {`posted ${questionLength} questions and answered ${answerLength}`}{' '}
+                {`posted ${questionLength} questions and answered ${answerLength}`}
               </p>
             </ListGroup.Item>
           )
