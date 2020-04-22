@@ -6,11 +6,12 @@ import { Check } from 'react-bootstrap-icons'
 
 import NotFound from './NotFound'
 
-export const Question = ({ question, authedUser, dispatch }) => {
+export const Question = ({ question, authedUser, dispatch, user }) => {
   if (!question) {
     return <NotFound />
   }
 
+  const { avatarURL } = user
   const { author, optionOne, optionTwo } = question
 
   const onSubmit = (answer) => {
@@ -34,6 +35,11 @@ export const Question = ({ question, authedUser, dispatch }) => {
     <div>
       <h1>Would you rather</h1>
       <h4>{`posted by ${author}`} </h4>
+      <img
+        style={{ height: '100px', width: '100px' }}
+        src={avatarURL}
+        alt="user avatar"
+      />
       <Row>
         <Col>
           <h2> Option 1 </h2>
@@ -87,12 +93,13 @@ export const Question = ({ question, authedUser, dispatch }) => {
   )
 }
 
-function mapStateToProps({ authedUser, questions }, props) {
+function mapStateToProps({ authedUser, questions, users }, props) {
   const { qid } = props.match.params
   const question = questions[qid] ? questions[qid] : null
   return {
     question,
     authedUser,
+    user: users[authedUser],
   }
 }
 
